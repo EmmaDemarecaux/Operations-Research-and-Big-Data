@@ -1,6 +1,5 @@
 # Project - Introduction to Real-World Graphs
-
->**Emma Demarecaux - Charles Desaleux**
+>**Emma DEMARECAUX - Charles DESALEUX**
 ************************
 
 As an example, we uses the small graph `tuto_graph.txt` throughout the code description. It contains 7 nodes, numbered from 0 to 6, and the following edges:
@@ -198,6 +197,4 @@ cd part3
 ```
 
 # Credits
-**Maximilien Danisch** http://bit.ly/danisch
-
-http://github.com/maxdan94/LoadGraph
+>**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph
