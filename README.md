@@ -148,7 +148,7 @@ The program expects the following arguments:
 As an example, one can run the following command:
 
 ```
-./page_rank graphs/tuto_graph.txt graphs/tuto_names.txt results/tuto_degrees.txt results/tuto_pagerank.txt
+./page_rank graphs/tuto_graph.txt graphs/tuto_names.txt results/tuto_degrees_out.txt results/tuto_pagerank.txt
 ```
 
 # Part 3
