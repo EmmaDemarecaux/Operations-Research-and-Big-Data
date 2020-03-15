@@ -15,14 +15,14 @@ As an example, we uses the small graph `tuto_graph.txt` throughout the code desc
 * 4 - 5
 * 4 - 6
 
-## Part 1
+# Part 1
 
 Change the current working directory to `part1`:
 ```
 cd part1
 ```
 
-### LoadGraph
+## LoadGraph
 
 These programs load a graph in main memory as:
 
@@ -30,7 +30,7 @@ These programs load a graph in main memory as:
 * an adjacency matrix;
 * an adjacency list.
 
-#### To compile:
+### To compile:
 
 ```
 gcc ./LoadGraph/edgelist.c -O3 -o ./LoadGraph/edgelist
@@ -42,7 +42,7 @@ gcc ./LoadGraph/adjmatrix.c -O3 -o ./LoadGraph/adjmatrix
 gcc ./LoadGraph/adjarray.c -O3 -o ./LoadGraph/adjarray
 ```
 
-#### To execute:
+### To execute:
 
 Each program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space).  
 The program will load the graph in main memory and then terminate.
@@ -58,7 +58,7 @@ As an example, one can run the following commands:
 ./LoadGraph/adjarray graphs/tuto_graph.txt
 ```
 
-#### Performance:
+### Performance:
 
 - edgelist: up to 500 million edges on my laptop with 8G of RAM. Takes more or less 1.6G of RAM and 25 seconds (I have an SSD hardrive) for 100M edges.
 - adjmatrix: up to 200.000 nodes on my laptop with 8G of RAM. Takes more or less 4G of RAM and 10 seconds for 100.000 nodes.
@@ -66,7 +66,7 @@ As an example, one can run the following commands:
 
 adjmatrix is much less scallable than the two other programs for sparse graphs. adjmatrix uses O(n^2) memory (n^2 boolean values (note that adjmatrix uses 1 byte to encode a boolean value and not 1 bit...)), while edgelist uses O(m) (2m unsigned) and adjlist uses O(m+n) (4m+2n unsigned).
 
-#### Note:
+### Note:
 
 If the graph is directed (and weighted) with self-loops and you want to make it undirected unweighted without self-loops, use the following linux command line.  
 
@@ -74,17 +74,17 @@ If the graph is directed (and weighted) with self-loops and you want to make it 
 awk '{if ($1<$2) print $1" "$2;else if ($2<$1) print $2" "$1}' graph.txt | sort -n -k1 -k2 -u > undirected-graph.txt
 ```
 
-### BFS
+## BFS
 
 The program will load the graph in main memory and return the number of connected components as well as the fraction of nodes in the largest component.
 
-#### To compile:
+### To compile:
 
 ```
 gcc bfs.c -O3 -o bfs
 ```
 
-#### To execute:
+### To execute:
 
 The program expects the following arguments:
  
@@ -97,16 +97,16 @@ As an example, one can run the following command:
 ./bfs graphs/tuto_graph.txt results/tuto_bfs.txt
 ```
 
-### Triangles
+## Triangles
 
 The program will load the graph in main memory and return the number of triangles.
-#### To compile:
+### To compile:
 
 ```
 gcc triangles.c -O3 -o triangles
 ```
 
-#### To execute:
+### To execute:
 
 The program expects the following arguments:
  
@@ -119,24 +119,24 @@ As an example, one can run the following command:
 ./triangles graphs/tuto_graph.txt results/tuto_triangles.txt
 ```
 
-## Part 2
+# Part 2
 
 Change the current working directory to `part2`:
 ```
 cd part2
 ```
 
-### PageRank
+## PageRank
 
 The program is the implementation of PageRank using the power iteration method.
 
-#### To compile:
+### To compile:
 
 ```
 gcc page_rank.c -O3 -o page_rank
 ```
 
-#### To execute:
+### To execute:
 
 The program expects the following arguments:
  
@@ -151,7 +151,7 @@ As an example, one can run the following command:
 ./page_rank graphs/tuto_graph.txt graphs/tuto_names.txt results/tuto_degrees.txt results/tuto_pagerank.txt
 ```
 
-## Part 3
+# Part 3
 
 Change the current working directory to `part3`:
 ```
