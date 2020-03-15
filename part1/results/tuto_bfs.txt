@@ -1,0 +1,2 @@
+Number of connected components: 2
+Fraction of nodes in the largest connected component: 6/7 = 0.857143

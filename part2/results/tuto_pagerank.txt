@@ -1,0 +1,26 @@
+PageRank results with alpha = 0.150000:
+
+Number of iterations necessary to reach convergence: 18.
+
+The 5 pages with the highest PageRank:
+1: Node 5 with score 0.202643 and name Youtube
+2: Node 4 with score 0.195076 and name Airbnb
+3: Node 6 with score 0.176208 and name Gmail
+4: Node 1 with score 0.119736 and name Eurosport
+5: Node 2 with score 0.119736 and name Le Monde
+
+The 5 pages with the lowest PageRank:
+1: Node 3 with score 0.093301 and name TF1
+2: Node 0 with score 0.093301 and name Ebay
+3: Node 2 with score 0.119736 and name Le Monde
+4: Node 1 with score 0.119736 and name Eurosport
+5: Node 6 with score 0.176208 and name Gmail
+
+Full PageRank results:
+0 0.093301
+1 0.119736
+2 0.119736
+3 0.093301
+4 0.195076
+5 0.202643
+6 0.176208
