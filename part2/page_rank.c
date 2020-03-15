@@ -21,7 +21,7 @@ To execute:
 #include <time.h>//to estimate the runing time
 
 #define ALPHA 0.15
-#define NB_ITERATIONS 70
+#define NB_ITERATIONS 200
 #define EPSILON 0.000000001
 #define NB_RESULTS 5
 #define NAME_LENGTH 230

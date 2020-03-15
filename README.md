@@ -151,6 +151,31 @@ As an example, one can run the following command:
 ./page_rank graphs/tuto_graph.txt graphs/tuto_names.txt results/tuto_degrees_out.txt results/tuto_pagerank.txt
 ```
 
+## Correlations
+
+The program is the implementation of PageRank using the power iteration method.
+
+### To compile:
+
+```
+gcc correlations.c -O3 -o correlations
+```
+
+### To execute:
+
+The program expects the following arguments:
+ 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `degrees_out.txt` for writing the degree out of each node;
+ * `degrees_in.txt` for writing the degree in of each node;
+ * `results.txt` for writing the results of the PageRank algorithm.
+
+As an example, one can run the following command:
+
+```
+./correlations graphs/tuto_graph.txt results/tuto_degrees_out.txt results/tuto_degrees_in.txt results/tuto_correlations_0_15.txt
+```
+
 # Part 3
 
 Change the current working directory to `part3`:

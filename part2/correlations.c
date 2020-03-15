@@ -20,7 +20,7 @@ To execute:
 #include <strings.h>
 #include <time.h>//to estimate the runing time
 
-#define ALPHA 0.9
+#define ALPHA 0.15
 #define NB_ITERATIONS 200
 #define EPSILON 0.000000001
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
