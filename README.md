@@ -8,12 +8,12 @@
 
 As an example, we uses the small graph `tuto_graph.txt` throughout the code description. It contains 7 nodes, numbered from 0 to 6, and the following edges:
 
-* 0 - 1
-* 0 - 2
-* 0 - 5
-* 1 - 4
-* 4 - 5
-* 4 - 6
+* 0 -- 1
+* 0 -- 2
+* 0 -- 5
+* 1 -- 4
+* 4 -- 5
+* 4 -- 6
 
 # Part 1
 
@@ -176,9 +176,29 @@ As an example, one can run the following command:
 ./correlations graphs/tuto_graph.txt results/tuto_degrees_out.txt results/tuto_degrees_in.txt results/tuto_correlations_0_15.txt
 ```
 
+If one want to look at the following correlations for the [Wikipedia](http://cfinder.org/wiki/?n=Main.Data#toc1) dataset:
+
+
+* x = PageRank with α = 0.15, y = in-degree;
+* x = PageRank with α = 0.15, y = out-degree;
+* x = PageRank with α = 0.15, y = PageRank with α = 0.1; 
+* x = PageRank with α = 0.15, y = PageRank with α = 0.2;
+* x = PageRank with α = 0.15, y = PageRank with α = 0.5;
+* x = PageRank with α = 0.15, y = PageRank with α = 0.9.
+
+one can first collect the results from the file `correlation.c` and then run
+
+```
+python3 correlations.py
+```
+
+
 # Part 3
 
 Change the current working directory to `part3`:
 ```
 cd part3
 ```
+
+# Credits
+http://github.com/maxdan94/LoadGraph
