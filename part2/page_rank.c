@@ -1,12 +1,17 @@
 /*
 The program is the implementation of PageRank using the power iteration method.
+
+The program expects the following arguments:
+- edgelist.txt that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space;
+-  page_names.txt that should contain a mapping between a node ID and a name;
+- degrees.txt for writing the degree out of each node;
+- results.txt for writing the results of the PageRank algorithm.
  
 To compile:
 "gcc page_rank.c -O3 -o page_rank".
 
 To execute:
-"./bfs graphs/tuto_graph.txt results/results_bfs_tuto.txt".
-"edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
+"./page_rank graphs/tuto_graph.txt graphs/tuto_names.txt results/tuto_degrees.txt results/tuto_pagerank.txt".
 */
 
 
