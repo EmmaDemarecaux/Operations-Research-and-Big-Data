@@ -20,9 +20,9 @@ To execute:
 #include <strings.h>
 #include <time.h>//to estimate the runing time
 
-#define ALPHA 0.15
+#define ALPHA 0.9
 #define NB_ITERATIONS 200
-#define EPSILON 0.000000001
+#define EPSILON 0.00000001
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
 
 typedef struct {
@@ -108,6 +108,15 @@ double* mat_vect_prod(edgelist* g, unsigned long *degrees, double *P){
         out_node = g->edges[l].t;
         mat_vect_prod[out_node] += ((double)P[in_node])/((double)degrees[in_node]);
     }
+    double dead_ends_additions = 0;
+    for (i=0; i<g->n; i++){
+        if (degrees[i] == 0){
+            dead_ends_additions += ((double)P[i])/((double)g->n);
+        }
+    }
+    for (i=0; i<g->n; i++){
+        mat_vect_prod[i] += dead_ends_additions;
+    }
     return mat_vect_prod;
 }
 
@@ -124,34 +133,37 @@ double absolute(double element){
 
 double* power_iteration(edgelist* g, unsigned long *degrees, unsigned long *t){
     unsigned long i, it;
-    double cur_norm_1, prev_norm_1;
+    double norm_1, cvg;
     double *I = malloc(g->n*sizeof(double));
     double *P = malloc(g->n*sizeof(double));
+    double *Q = malloc(g->n*sizeof(double));
     for (i=0; i<g->n; i++){
         I[i] = 1./g->n;
         P[i] = 1./g->n;
     }
-    prev_norm_1 = 1.;
+    Q = P;
     // t iterations
     for (it=0; it<*t; it++){;
-        cur_norm_1 = 0.;
+        norm_1 = 0.;
+        cvg = 0.0;
         // updating P
         P = mat_vect_prod(g, degrees, P);
         for (i=0; i<g->n; i++){
             P[i] = (1-ALPHA) * P[i] + ALPHA * I[i];
             // updating norm
-            cur_norm_1 += P[i];
+            norm_1 += P[i];
         }
         // normalisation
         for (i=0; i<g->n; i++){
-            P[i] += (1.-cur_norm_1) / g->n;
+            P[i] += (1.-norm_1) / g->n;
+            cvg += absolute(P[i] - Q[i]);
         }
         // convergence test
-        if (absolute(prev_norm_1-cur_norm_1) < EPSILON){
+        if (cvg < EPSILON){
             *t = it;
             return P;
         }
-        prev_norm_1 = cur_norm_1;
+        Q = P;
     }
     return P;
 }

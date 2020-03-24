@@ -192,6 +192,28 @@ one can first collect the results from the file `correlation.c` and then run
 python3 correlations.py
 ```
 
+## k-core decomposition
+
+The program is the implementation of the core decomposition algorithm using Python.
+
+### To compile:
+
+```
+gcc k-core.c -O3 -o k-core
+```
+
+### To execute:
+
+The program expects the following arguments:
+ 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `results.txt` for writing the results of the PageRank algorithm.
+
+As an example, one can run the following command:
+
+```
+./k-core graphs/tuto_graph.txt results/tuto_k-core.txt
+```
 
 # Part 3
 
