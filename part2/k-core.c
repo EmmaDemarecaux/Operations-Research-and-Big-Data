@@ -3,13 +3,14 @@ The program is the implementation of PageRank using the power iteration method.
 
 The program expects the following arguments:
 - edgelist.txt that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space;
+- degrees.txt for writing the degree of each node;
 - results.txt for writing the results of the PageRank algorithm.
  
 To compile:
 "gcc k-core.c -O3 -o k-core".
 
 To execute:
-"./k-core graphs/tuto_graph.txt results/tuto_k-core.txt".
+"./k-core graphs/tuto_graph.txt results/tuto_degrees.txt results/tuto_k-core.txt".
 */
 
 
@@ -93,13 +94,19 @@ void free_adjlist(adjlist *g){
     free(g);
 }
 
-unsigned long* degree(adjlist* g){
+unsigned long* degree(adjlist *g, char *output){
     unsigned long *degrees = calloc(g->n, sizeof(unsigned long));
-    unsigned long l;
+    unsigned long l, i;
     for (l=0; l<g->e; l++){
         degrees[g->edges[l].s]++;
         degrees[g->edges[l].t]++;
     }
+    FILE *f = fopen(output, "w");
+    for (i=0; i<g->n; i++){
+        fprintf(f,"%lu %lu\n", i, degrees[i]);
+    }
+    fclose(f);
+    return degrees;
     return degrees;
 }
 
@@ -209,8 +216,8 @@ int main(int argc, char** argv){
     printf("Number of edges: %lu\n",g->e);
     printf("Building the adjacency list\n");
     mkadjlist(g);
-    unsigned long *degrees = degree(g);
-    unsigned long core_value = core_decomposition(g, degrees, argv[2]);
+    unsigned long *degrees = degree(g, argv[2]);
+    unsigned long core_value = core_decomposition(g, degrees, argv[3]);
     printf("Graph core value = %lu\n", core_value);
     free(degrees);
     free_adjlist(g);

@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd  
 import seaborn as sns
-import numpy as np
 
 # PageRank with alpha = 0.15
 file_015 = open("results/wiki_correlations_0_15.txt", "r")

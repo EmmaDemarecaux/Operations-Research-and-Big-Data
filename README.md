@@ -203,12 +203,13 @@ gcc k-core.c -O3 -o k-core
 The program expects the following arguments:
  
  * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `degrees.txt` for writing the degree of each node;
  * `results.txt` for writing the results of the PageRank algorithm.
 
 As an example, one can run the following command:
 
 ```
-./k-core graphs/tuto_graph.txt results/tuto_k-core.txt
+./k-core graphs/tuto_graph.txt results/tuto_degrees.txt results/tuto_k-core.txt
 ```
 
 # Part 3
