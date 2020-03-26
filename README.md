@@ -1,4 +1,4 @@
-# Project - Introduction to Real-World Graphs
+# Project - Operations Research and Big Data
 >**Emma DEMARECAUX - Charles DESALEUX**
 ************************
 
