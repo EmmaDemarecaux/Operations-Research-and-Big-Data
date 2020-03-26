@@ -219,5 +219,18 @@ Change the current working directory to `part3`:
 cd part3
 ```
 
+```
+python3 random_graph.py 
+```
+```
+gcc label_propagation.c -O3 -o label_propagation
+```
+```
+./label_propagation graphs/random1_p0.3_q0.3.txt results/random1_communities.txt
+```
+```
+python3 draw_graph_community.py graphs/random6_p0.6_q0.1.txt results/random6_communities.txt 
+```
+
 # Credits
 >**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph

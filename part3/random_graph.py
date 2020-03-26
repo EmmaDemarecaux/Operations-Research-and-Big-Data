@@ -3,7 +3,6 @@ import itertools
 import random
 from networkx.drawing.nx_pylab import draw
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def generate_random_graph(n, c, p, q):
@@ -44,13 +43,23 @@ if __name__ == '__main__':
     
     n = 100
     c = 4
-    P = [0.9, 0.8, 0.7, 0.6, 0.9, 0.8, 0.9, 0.8, 0.6]
-    Q = [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.15, 0.15, 0.15]
+    P = [0.9, 0.8, 0.7, 0.6, 0.9, 0.7, 0.6, 0.5, 0.6, 0.3]
+    Q = [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3]
     for (p, q) in zip(P,Q):
+        # create random graph
         G, clusters = generate_random_graph(n, c, p, q)
+        # save graph
+        file_name = str(int(round(p/q, 0))) + "_p" + str(round(p, 2)) + "_q" + str(round(q, 2))
+        res_file = open("graphs/random" + file_name + ".txt", "w")
+        res_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in G.edges()])
+        res_file.close()
+        # save clusters
+        clusters_file = open("results/random" + file_name + "_clusters.txt", "w")
+        clusters_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in enumerate(clusters)])
+        clusters_file.close()
+        # draw graph
         draw(G, node_color=clusters, node_size=120, cmap=plt.cm.Reds)
         plt.title('p/q = ' + str(round(p, 2)) + '/' + str(round(q, 2)) + 
-                  ' = ' + str(round(p/q, 2)))
-        plt.savefig('figures/random_graph' + str(round(p/q, 2)) + 
-                    '_p' + str(round(p, 2)) + '_q' + str(round(q, 2))+ '.png')
+                  ' = ' + str(int(round(p/q, 0))))
+        plt.savefig("figures/random" + file_name + ".png")
         plt.show()

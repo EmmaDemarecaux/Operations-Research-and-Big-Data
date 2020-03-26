@@ -110,15 +110,16 @@ unsigned long* degree(adjlist *g, char *output){
     return degrees;
 }
 
-void swap(unsigned long* array, unsigned long i, unsigned long j){
-    unsigned long temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+// A utility function to swap array elements
+void swap(unsigned long *a, unsigned long *b){
+    unsigned long temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *output){
     // initialisation
-    unsigned long i, j, d, v, index, node, node_degree, v_degree, many_neighbors, swap_index;
+    unsigned long i, j, a, b, d, v, index, node, node_degree, v_degree, many_neighbors;
     unsigned long c = 0, degree_max = 0;
     // maximum degree
     for (i=0; i<g->n; i++){
@@ -174,16 +175,22 @@ unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *outpu
                 if (v_degree != ULONG_MAX){
                     degrees[v]--;
                     if (i < start_degrees_index[v_degree]){
-                        swap(ordered_nodes_by_degree, start_degrees_index[v_degree], nodes_index_ordering[v]);
-                        swap(nodes_index_ordering, ordered_nodes_by_degree[start_degrees_index[v_degree]], ordered_nodes_by_degree[nodes_index_ordering[v]]);
+                        a = start_degrees_index[v_degree];
+                        b = nodes_index_ordering[v];
+                        swap(&ordered_nodes_by_degree[a], &ordered_nodes_by_degree[b]);
+                        swap(&nodes_index_ordering[ordered_nodes_by_degree[a]],
+                             &nodes_index_ordering[ordered_nodes_by_degree[b]]);
                         start_degrees_index[v_degree]++;
                         if (many_neighbors != 1){
                             start_degrees_index[node_degree]++;
                         }
                     }
                     else{
-                        swap(ordered_nodes_by_degree, i+1, nodes_index_ordering[v]);
-                        swap(nodes_index_ordering, ordered_nodes_by_degree[i+1], ordered_nodes_by_degree[nodes_index_ordering[v]]);
+                        a = i+1;
+                        b = nodes_index_ordering[v];
+                        swap(&ordered_nodes_by_degree[a], &ordered_nodes_by_degree[b]);
+                        swap(&nodes_index_ordering[ordered_nodes_by_degree[a]],
+                             &nodes_index_ordering[ordered_nodes_by_degree[b]]);
                         start_degrees_index[v_degree] = start_degrees_index[v_degree] + 2;
                         start_degrees_index[v_degree - 1] ++;
                     }
