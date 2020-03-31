@@ -190,7 +190,7 @@ python3 correlations.py
 
 ## k-core decomposition
 
-The program is the implementation of the core decomposition algorithm using Python.
+The program is the implementation of the core decomposition algorithm.
 
 ### To compile:
 
@@ -212,6 +212,19 @@ As an example, one can run the following command:
 ./k-core graphs/tuto_graph.txt results/tuto_degrees.txt results/tuto_k-core.txt
 ```
 
+## Graph mining with k-core
+
+After running the k-core algorithm, the program makes a plot degree/coreness using Python:
+
+### To execute:
+
+```
+python3 k-core_plot.py 
+```
+
+Using the google scholar dataset, the result is `figures/net_coreness_degree.png` that represents the graph.
+
+
 # Part 3
 
 Change the current working directory to `part3`:
@@ -219,18 +232,63 @@ Change the current working directory to `part3`:
 cd part3
 ```
 
+## Generate random graphs
+
+The program generates the following random graphs using Python:
+
+ * The graph has 400 nodes partition into 4 clusters of 100 nodes;
+ * Each pair of nodes in the same cluster is connected with a probability p;
+ * Each pair of nodes in different clusters is connected with a probability q 􏰀<= p.
+
+### To execute:
+
 ```
 python3 random_graph.py 
 ```
+
+The results are for instance:
+
+ * `graphs/random9_p0.9_q0.1.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `results/random9_p0.9_q0.1_clusters.txt` that should contain the true cluster partition: one node and its cluster id on each line;
+ * `figures/random9_p0.9_q0.1.png` that represents the graph and color the nodes using a different color for each cluster.
+
+## Label propagation
+
+The program is the implementation of the label propagation algorithm.
+
+### To compile:
+
 ```
 gcc label_propagation.c -O3 -o label_propagation
 ```
+
+### To execute:
+
+The program expects the following arguments:
+ 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `results.txt` for writing the resulting partition: one node and its community id on each line.
+
+As an example, one can run the following command:
+
 ```
-./label_propagation graphs/random1_p0.3_q0.3.txt results/random1_communities.txt
+./label_propagation graphs/random9_p0.9_q0.1.txt results/random9_communities.txt
 ```
+
+To draw the graph and color the nodes using a different color for each community with Python, `draw_graph_community.py` expects the following arguments:
+ 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `results.txt` that should contain the resulting partition: one node and its community id on each line.
+
+As an example, one can run the following command:
+
 ```
-python3 draw_graph_community.py graphs/random6_p0.6_q0.1.txt results/random6_communities.txt 
+python3 draw_graph_community.py graphs/random9_p0.9_q0.1.txt results/random9_communities.txt
 ```
+
+The result is for instance `figures/random9_p0.9_q0.1_labels.png` that represents the graph and color the nodes using a different color for each community.
+
 
 # Credits
 >**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph
+>https://github.com/jlguillaume/louvain
