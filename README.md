@@ -291,4 +291,5 @@ The result is for instance `figures/random9_p0.9_q0.1_labels.png` that represent
 
 # Credits
 >**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph
+
 >https://github.com/jlguillaume/louvain
