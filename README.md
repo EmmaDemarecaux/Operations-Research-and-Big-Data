@@ -11,6 +11,8 @@ As an example, we uses the small graph `tuto_graph.txt` throughout the code desc
 * 4 -- 5
 * 4 -- 6
 
+![Image description](tuto_graph.png)
+
 # Part 1
 
 Change the current working directory to `part1`:
@@ -291,5 +293,3 @@ The result is for instance `figures/random9_p0.9_q0.1_labels.png` that represent
 
 # Credits
 >**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph
-
->https://github.com/jlguillaume/louvain
