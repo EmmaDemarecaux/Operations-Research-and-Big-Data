@@ -6,7 +6,6 @@ To compile:
 
 To execute:
 "./connected_components graphs/edgelist.txt results/edgelist_cc.txt".
-"edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 */
 
 #include <stdlib.h>

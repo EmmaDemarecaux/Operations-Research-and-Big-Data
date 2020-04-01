@@ -69,7 +69,7 @@ gcc connected_components.c -O3 -o connected_components
 
 The program expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `results.txt` for writing the results.
  
 As an example, one can run the following command:
@@ -90,9 +90,7 @@ gcc diameter.c -O3 -o diameter
 
 ### To execute:
 
-The program expects the following arguments:
- 
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+The program expects the following arguments: `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  
 As an example, one can run the following command:
 
@@ -113,7 +111,7 @@ gcc triangles.c -O3 -o triangles
 
 The program expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `results.txt` for writing the results.
  
 As an example, one can run the following command:
@@ -143,7 +141,7 @@ gcc page_rank.c -O3 -o page_rank
 
 The program expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `page_names.txt` that should contain a mapping between a node ID and a name;
  * `degrees.txt` for writing the degree out of each node;
  * `results.txt` for writing the results of the PageRank algorithm.
@@ -168,7 +166,7 @@ gcc correlations.c -O3 -o correlations
 
 The program expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `degrees_out.txt` for writing the degree out of each node;
  * `degrees_in.txt` for writing the degree in of each node;
  * `results.txt` for writing the results of the PageRank algorithm.
@@ -209,7 +207,7 @@ gcc k-core.c -O3 -o k-core
 
 The program expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `degrees.txt` for writing the degree of each node;
  * `results.txt` for writing the results of the PageRank algorithm.
 
@@ -255,7 +253,7 @@ python3 random_graph.py
 
 The results are for instance:
 
- * `graphs/random9_p0.9_q0.1.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `graphs/random9_p0.9_q0.1.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `results/random9_p0.9_q0.1_clusters.txt` that should contain the true cluster partition: one node and its cluster id on each line;
  * `figures/random9_p0.9_q0.1.png` that represents the graph and color the nodes using a different color for each cluster.
 
@@ -273,7 +271,7 @@ gcc label_propagation.c -O3 -o label_propagation
 
 The program expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `results.txt` for writing the resulting partition: one node and its community id on each line.
 
 As an example, one can run the following command:
@@ -284,7 +282,7 @@ As an example, one can run the following command:
 
 To draw the graph and color the nodes using a different color for each community with Python, `draw_graph_community.py` expects the following arguments:
  
- * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `results.txt` that should contain the resulting partition: one node and its community id on each line.
 
 As an example, one can run the following command:

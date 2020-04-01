@@ -12,8 +12,8 @@ To compile:
 
 To execute:
 "./LoadGraph/edgelist graphs/edgelist.txt".
-"edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
-The prograph loads the graph in main memory and then it terminates.
+"edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space).
+The program will load the graph in main memory and then terminate.
 
 Note:
 If the graph is directed (and weighted) with selfloops and you want to make it undirected unweighted without selfloops, use the following linux command line.

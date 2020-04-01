@@ -1,12 +1,11 @@
 /*
- The program will load the graph in main memory and return the number of connected components as well as the fraction of nodes in the largest component. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); and an argument `results.txt` for writing the results.
+ The program will load the graph in main memory and compute a good lower bound to the diameter of a graph. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space).
  
 To compile:
 "gcc diameter.c -O3 -o diameter".
 
 To execute:
 "./diameter graphs/edgelist.txt".
-"edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 */
 
 #include <stdlib.h>
@@ -14,7 +13,7 @@ To execute:
 #include <time.h> // to estimate the runing time
 
 #define NLINKS 100000000 // maximum number of edges for memory allocation, will increase if needed
-#define NITER 100
+#define NITER 20
 
 typedef struct {
     unsigned long s;
@@ -90,29 +89,6 @@ void free_adjlist(adjlist *g){
     free(g);
 }
 
-// A utility function to swap array elements
-void swap (unsigned long *a, unsigned long *b){
-    unsigned long temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-// A function to generate a random permutation of arr[]
-void randomize(unsigned long *arr, unsigned long n){
-    // Use a different seed value so that we don't get same
-    // result each time we run this program
-    srand (time(NULL));
-    // Start from the last element and swap one by one. We don't
-    // need to run for the first element that's why i > 0
-    for (unsigned long i = n-1; i > 0; i--)
-    {
-        // Pick a random index from 0 to i
-        unsigned long j = rand() % (i+1);
-        // Swap arr[i] with the element at random index
-        swap(&arr[i], &arr[j]);
-    }
-}
-
 // BFS algorithm
 unsigned long bfs(adjlist *g, unsigned long s, unsigned long *diameter){
     // creating a FIFO to add and pop nodes easily
@@ -121,7 +97,7 @@ unsigned long bfs(adjlist *g, unsigned long s, unsigned long *diameter){
     unsigned int *marker = calloc(g->n, sizeof(unsigned long));
     // creating a array to store node distance from the source node
     unsigned long *distances = calloc(g->n, sizeof(unsigned long));
-    // initializing the beginning and the end indexes of the FIFO to 0, and the node farthest from s to s
+    // initializing the beginning and the end indexes of the FIFO to 0, and the farthest node from s to s
     unsigned long b = 0, e = 0, w = s;
     // initializing index i for the for loop and two nodes u and v
     unsigned long i, u, v;
@@ -194,6 +170,7 @@ int main(int argc, char** argv){
     printf("Building the adjacency list\n");
     mkadjlist(g);
     // computing a good lower bound to the diameter of a graph
+    printf("Diameter algorithm:\n");
     printf("A lower bound to the diameter of a graph is %lu\n", lower_bound_diameter(g));
     free_adjlist(g);
     t2=time(NULL);

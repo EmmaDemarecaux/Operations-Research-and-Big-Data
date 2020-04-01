@@ -6,7 +6,6 @@ To compile:
 
 To execute:
 "./triangles graphs/tuto_graph.txt results/tuto_triangles.txt".
-"edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 */
 
 
