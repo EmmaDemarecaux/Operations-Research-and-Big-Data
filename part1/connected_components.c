@@ -2,10 +2,10 @@
  The program will load the graph in main memory and return the number of connected components as well as the fraction of nodes in the largest component. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); and an argument `results.txt` for writing the results.
  
 To compile:
-"gcc bfs.c -O3 -o bfs".
+"gcc connected_components.c -O3 -o connected_components".
 
 To execute:
-"./bfs graphs/tuto_graph.txt results/tuto_bfs.txt".
+"./connected_components graphs/edgelist.txt results/edgelist_cc.txt".
 "edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 */
 
@@ -90,14 +90,13 @@ void free_adjlist(adjlist *g){
 }
 
 // BFS algorithm
-// inputs: an adjacency array and a source node
 unsigned long bfs(adjlist *g, unsigned int *marker, unsigned long s){
-    // createing a FIFO to add and pop nodes easily
+    // creating a FIFO to add and pop nodes easily
     unsigned long *fifo = malloc(g->n * sizeof(unsigned long));
     // initializing the number of nodes in the connected component to 0, the beginning and the end indexes of the FIFO to 0
     unsigned long counter = 0, b = 0, e = 0;
     // initializing index i for the for loop and two nodes u and v
-    unsigned long v, i, u;
+    unsigned long i, u, v;
     // adding the source node to the FIFO and incrementing the end index of the FIFO
     fifo[e++] = s;
     // marking the source node
@@ -123,7 +122,7 @@ unsigned long bfs(adjlist *g, unsigned int *marker, unsigned long s){
 }
 
 // computing the number of connected components as well as the fraction of nodes in the largest connected component
-void connected_components(adjlist *g, char *output){
+void number_connected_components(adjlist *g, char *output){
     // to mark a node once it is visited
     unsigned int *marker = calloc(g->n, sizeof(unsigned long));
     // initialisation of the number of connected components and of the size of the largest connected component
@@ -168,7 +167,7 @@ int main(int argc, char** argv){
     printf("Building the adjacency list\n");
     mkadjlist(g);
     // computing the number of connected components as well as the fraction of nodes in the largest connected component
-    connected_components(g, argv[2]);
+    number_connected_components(g, argv[2]);
     free_adjlist(g);
     t2=time(NULL);
     printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));

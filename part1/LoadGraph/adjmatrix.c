@@ -8,10 +8,10 @@ Info:
 Feel free to use these lines as you wish. This program loads an unweighetd graph in main memory as an adjacency matrix.
 
 To compile:
-"gcc adjmatrix.c -O3 -o adjmatrix".
+"gcc ./LoadGraph/adjmatrix.c -O3 -o ./LoadGraph/adjmatrix".
 
 To execute:
-"./adjmatrix edgelist.txt".
+"./LoadGraph/adjmatrix graphs/edgelist.txt".
 "edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 The prograph will load the graph in main memory and then terminate.
 
@@ -28,6 +28,9 @@ Takes more or less 4G of RAM and 10 seconds (I have an SSD hardrive) for 100.000
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>//to estimate the runing time
+#include <sys/resource.h>
+#include <errno.h>
+#include <unistd.h>
 
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
 
@@ -98,6 +101,8 @@ void free_adjmatrix(adjmatrix *g){
 int main(int argc,char** argv){
 	adjmatrix* g;
 	time_t t1,t2;
+    struct rusage r_usage;
+    int ret;
 
 	t1=time(NULL);
 
@@ -115,6 +120,9 @@ int main(int argc,char** argv){
 	t2=time(NULL);
 
 	printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
+    ret = getrusage(RUSAGE_SELF,&r_usage);
+    if (ret == 0)
+        printf("- Memory usage = %ld kilobytes\n", r_usage.ru_maxrss);
 
 	return 0;
 }

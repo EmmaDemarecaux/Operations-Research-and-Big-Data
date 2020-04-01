@@ -4,9 +4,9 @@
 
 As an example, we uses the small graph `tuto_graph.txt` throughout the code description. It contains 7 nodes, numbered from 0 to 6, and the following edges: 0-1, 0-2, 0-5, 1-4, 4-5, 4-6. Here is a representation of the graph:
 
-<img src="tuto_graph.png" height="420" width="300">
+<img src="tuto_graph.png" height="400" width="300">
 
-# Part 1
+# Part 1: Handling a large graph
 
 Change the current working directory to `part1`:
 ```
@@ -15,7 +15,7 @@ cd part1
 
 ## LoadGraph
 
-These programs load a graph in main memory as:
+These programs read a graph and store it in memory as:
 
 * a list of edges;
 * an adjacency matrix;
@@ -35,9 +35,7 @@ gcc ./LoadGraph/adjarray.c -O3 -o ./LoadGraph/adjarray
 
 ### To execute:
 
-Each program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space).  
-The program will load the graph in main memory and then terminate.
-As an example, one can run the following commands:
+Each program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space). The program will load the graph in main memory and then terminate. As an example, one can run the following commands:
 
 ```
 ./LoadGraph/edgelist graphs/tuto_graph.txt
@@ -49,30 +47,22 @@ As an example, one can run the following commands:
 ./LoadGraph/adjarray graphs/tuto_graph.txt
 ```
 
-### Performance:
+### Note
 
-- edgelist: up to 500 million edges on my laptop with 8G of RAM. Takes more or less 1.6G of RAM and 25 seconds (I have an SSD hardrive) for 100M edges.
-- adjmatrix: up to 200.000 nodes on my laptop with 8G of RAM. Takes more or less 4G of RAM and 10 seconds for 100.000 nodes.
-- adjlist: up to 200 million edges on my laptop with 8G of RAM: takes more or less 4G of RAM and 30 seconds for 100M edges.
-
-adjmatrix is much less scallable than the two other programs for sparse graphs. adjmatrix uses O(n^2) memory (n^2 boolean values (note that adjmatrix uses 1 byte to encode a boolean value and not 1 bit...)), while edgelist uses O(m) (2m unsigned) and adjlist uses O(m+n) (4m+2n unsigned).
-
-### Note:
-
-If the graph is directed (and weighted) with self-loops and you want to make it undirected unweighted without self-loops, use the following linux command line.  
+If the graph is directed (and weighted) with self-loops and you want to make it undirected unweighted without self-loops, use the following command line.  
 
 ```
 awk '{if ($1<$2) print $1" "$2;else if ($2<$1) print $2" "$1}' graph.txt | sort -n -k1 -k2 -u > undirected-graph.txt
 ```
 
-## BFS
+## Connected components
 
 The program will load the graph in main memory and return the number of connected components as well as the fraction of nodes in the largest component.
 
 ### To compile:
 
 ```
-gcc bfs.c -O3 -o bfs
+gcc connected_components.c -O3 -o connected_components
 ```
 
 ### To execute:
@@ -85,7 +75,29 @@ The program expects the following arguments:
 As an example, one can run the following command:
 
 ```
-./bfs graphs/tuto_graph.txt results/tuto_bfs.txt
+./connected_components graphs/tuto_graph.txt results/tuto_cc.txt
+```
+
+## Diameter
+
+The program will load the graph in main memory and compute a good lower bound to the diameter of a graph.
+
+### To compile:
+
+```
+gcc diameter.c -O3 -o diameter
+```
+
+### To execute:
+
+The program expects the following arguments:
+ 
+ * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space; 
+ 
+As an example, one can run the following command:
+
+```
+./diameter graphs/tuto_graph.txt
 ```
 
 ## Triangles

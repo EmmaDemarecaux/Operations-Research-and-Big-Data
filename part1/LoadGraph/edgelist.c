@@ -8,10 +8,10 @@ Info:
 Feel free to use these lines as you wish. This program loads a graph in main memory as a list of edges.
 
 To compile:
-"gcc edgelist.c -O3 -o edgelist".
+"gcc ./LoadGraph/edgelist.c -O3 -o ./LoadGraph/edgelist".
 
 To execute:
-"./edgelist edgelist.txt".
+"./LoadGraph/edgelist graphs/edgelist.txt".
 "edgelist.txt" should contain the graph: one edge on each line (two unsigned long (nodes' ID)) separated by a space.
 The prograph loads the graph in main memory and then it terminates.
 
@@ -27,6 +27,9 @@ Takes more or less 1.6G of RAM and 25 seconds (I have an SSD hardrive) for 100M 
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>//to estimate the runing time
+#include <sys/resource.h>
+#include <errno.h>
+#include <unistd.h>
 
 #define NLINKS 100000000 //maximum number of edges for memory allocation, will increase if needed
 
@@ -82,6 +85,8 @@ void free_edgelist(edgelist *g){
 int main(int argc,char** argv){
 	edgelist* g;
 	time_t t1,t2;
+    struct rusage r_usage;
+    int ret;
 
 	t1=time(NULL);
 
@@ -96,6 +101,9 @@ int main(int argc,char** argv){
 	t2=time(NULL);
 
 	printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
+    ret = getrusage(RUSAGE_SELF,&r_usage);
+    if (ret == 0)
+        printf("- Memory usage = %ld kilobytes\n", r_usage.ru_maxrss);
 
 	return 0;
 }
