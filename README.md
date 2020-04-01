@@ -4,7 +4,7 @@
 
 As an example, we uses the small graph `tuto_graph.txt` throughout the code description. It contains 7 nodes, numbered from 0 to 6, and the following edges: 0-1, 0-2, 0-5, 1-4, 4-5, 4-6. Here is a representation of the graph:
 
-<img src="tuto_graph.png" height="450" width="300">
+<img src="tuto_graph.png" height="420" width="300">
 
 # Part 1
 
