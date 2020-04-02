@@ -100,7 +100,8 @@ As an example, one can run the following command:
 
 ## Triangles
 
-The program will load the graph in main memory and return the number of triangles.
+The program will load the graph in main memory and return its list of triangles along with the number of triangles.
+
 ### To compile:
 
 ```

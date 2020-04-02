@@ -1,5 +1,5 @@
 /*
- The program will load the graph in main memory and return the number of triangles. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); and an argument `results.txt` for writing the results.
+ The program will load the graph in main memory and return its list of triangles along with the number of triangles. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); and an argument `results.txt` for writing the results.
  
 To compile:
 "gcc triangles.c -O3 -o triangles".
@@ -78,7 +78,6 @@ void mkadjlist(adjlist* g){
         g->adj[ g->cd[v] + d[v]++ ]=u;
     }
     free(d);
-    // free(g->edges);
 }
 
 // freeing memory
@@ -112,19 +111,23 @@ void sort_neighbors_list(adjlist* g){
     }
 }
 
-void triangles(adjlist* g, char *output){
+void list_triangles(adjlist* g, char *output){
     unsigned long u, v;
     unsigned long w1, w2; // neighbors of u and v
-    unsigned long j, i1, i2; // indexes
+    unsigned long i, j, i1, i2; // indexes
+    // sorting the list of neighbors of each node
+    sort_neighbors_list(g);
     // initialisation of the number of triangles
     unsigned long number_triangles = 0;
+    printf("Writing results in file %s\n", output);
+    FILE *f = fopen(output, "w");
     // for each u in G
     for(u=0; u<g->n; u++){
-        // for each edge (u,v) in G
-        // the list of neighbors of u is truncated and sorted
+        // for each edge (u,v) in G such that u < v
         for (j = g->cd[u]; j < g->cd[u+1]; j++){
             v = g->adj[j];
             if(u < v){
+                // the list of neighbors of u and v are already truncated and sorted
                 // computing the intersection of the lists of neighbors of u and v
                 // taking the first neighbor of u
                 i1 = g->cd[u];
@@ -132,6 +135,7 @@ void triangles(adjlist* g, char *output){
                 // taking the first neighbor of v
                 i2 = g->cd[v];
                 w2 = g->adj[i2];
+                // considering only the neighbors w of u  and v such that w < u and w < v
                 while((i1 < g->cd[u+1]) && (i2 < g->cd[v+1]) && (w2 < u) && (w1 < u)){
                     if(w1 > w2){
                         // going to v's next neighbor
@@ -144,9 +148,10 @@ void triangles(adjlist* g, char *output){
                         w1 = g->adj[i1];
                     }
                     else{
-                        // w1 = w2: we found a common neighbor of u and v
+                        // w1 = w2 := w: we found a common neighbor of u and v such that w < u and w < v
                         // incrementing the number of triangles
                         number_triangles++;
+                        fprintf(f,"%lu %lu %lu\n", u, v, w1);
                         // going to u's next neighbor
                         i1++;
                         w1 = g->adj[i1];
@@ -161,8 +166,6 @@ void triangles(adjlist* g, char *output){
     // displaying results
     printf("Number of triangles: %lu\n", number_triangles);
     // writing results in file
-    printf("Writing in file %s\n", output);
-    FILE *f = fopen(output, "w");
     fprintf(f,"Number of triangles: %lu\n", number_triangles);
     fclose(f);
 }
@@ -178,10 +181,8 @@ int main(int argc, char** argv){
     printf("Number of edges: %lu\n",g->e);
     printf("Building the adjacency list\n");
     mkadjlist(g);
-    // sorting the list of neighbors of each node
-    sort_neighbors_list(g);
     // computing the number of triangles
-    triangles(g, argv[2]);
+    list_triangles(g, argv[2]);
     free_adjlist(g);
     t2=time(NULL);
     printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));

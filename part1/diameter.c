@@ -136,8 +136,8 @@ unsigned long bfs(adjlist *g, unsigned long s, unsigned long *diameter){
 unsigned long lower_bound_diameter(adjlist *g){
     // initializing the diameter, the source node and an index
     unsigned long diameter, s, i;
+    // to save the nodes
     unsigned long nodes[NITER];
-    // initializing previous diameter and an index
     // setting the source node to the first random node which has at least one neighbor
     s = rand() % (g->n);
     while (g->cd[s+1] == g->cd[s])
@@ -150,6 +150,7 @@ unsigned long lower_bound_diameter(adjlist *g){
         printf("    -- distance between nodes %lu ", s);
         s = bfs(g, s, &diameter);
         printf("and %lu = %lu\n", s, diameter);
+        // checking if diameter found is constant
         if (i > 0){
             if (s == nodes[i-1])
                 return diameter;
