@@ -77,37 +77,36 @@ void free_edgelist(edgelist *g){
     free(g);
 }
 
-unsigned long* degree_out(edgelist* g, char *output){
-    unsigned long l, i, source_node;
-    unsigned long *degrees = calloc(g->n, sizeof(unsigned long));
+void degree_out(edgelist* g, unsigned long *degrees_out, char *output){
+    unsigned long l, i, u;
     for (l=0; l<g->e; l++){
-        source_node = g->edges[l].s;
-        degrees[source_node]++;
+        u = g->edges[l].s;
+        degrees_out[u]++;
     }
+    // writing results
     FILE *f = fopen(output, "w");
     for (i=0; i<g->n; i++){
-        fprintf(f,"%lu %lu\n", i, degrees[i]);
+        fprintf(f,"%lu %lu\n", i, degrees_out[i]);
     }
     fclose(f);
-    return degrees;
 }
 
-double* mat_vect_prod(edgelist* g, unsigned long *degrees, double *P){
-    unsigned long l, i, degree, in_node, out_node;
+double* mat_vect_prod(edgelist* g, unsigned long *degrees_out, double *P){
+    unsigned long l, degree, u, v;
     double *mat_vect_prod = calloc(g->n, sizeof(double));
     for (l=0; l<g->e; l++){
-        in_node = g->edges[l].s;
-        out_node = g->edges[l].t;
-        mat_vect_prod[out_node] += ((double)P[in_node])/((double)degrees[in_node]);
+        u = g->edges[l].s;
+        v = g->edges[l].t;
+        mat_vect_prod[v] += ((double)P[u])/((double)degrees_out[u]);
     }
     double dead_ends_additions = 0;
-    for (i=0; i<g->n; i++){
-        if (degrees[i] == 0){
-            dead_ends_additions += ((double)P[i])/((double)g->n);
+    for (u=0; u<g->n; u++){
+        if (degrees_out[u] == 0){
+            dead_ends_additions += ((double)P[u])/((double)g->n);
         }
     }
-    for (i=0; i<g->n; i++){
-        mat_vect_prod[i] += dead_ends_additions;
+    for (v=0; v<g->n; v++){
+        mat_vect_prod[v] += dead_ends_additions;
     }
     return mat_vect_prod;
 }
@@ -123,40 +122,45 @@ double absolute(double element){
     return abs_element;
 }
 
-double* power_iteration(edgelist* g, unsigned long *degrees, unsigned long *t){
+double* power_iteration(edgelist* g, unsigned long *degrees_out, unsigned long *t){
     unsigned long i, it;
     double norm_1, cvg;
     double *I = malloc(g->n*sizeof(double));
     double *P = malloc(g->n*sizeof(double));
-    double *Q = malloc(g->n*sizeof(double));
+    double *P_prev = malloc(g->n*sizeof(double));
     for (i=0; i<g->n; i++){
         I[i] = 1./g->n;
         P[i] = 1./g->n;
     }
-    Q = P;
+    // initializing previous P
+    P_prev = P;
     // t iterations
-    for (it=0; it<*t; it++){;
+    for (it=0; it<*t; it++){
+        // initializing norm 1
         norm_1 = 0.;
+        // to measure convergence
         cvg = 0.0;
         // updating P
-        P = mat_vect_prod(g, degrees, P);
+        P = mat_vect_prod(g, degrees_out, P);
         for (i=0; i<g->n; i++){
             P[i] = (1-ALPHA) * P[i] + ALPHA * I[i];
-            // updating norm
+            // updating norm 1
             norm_1 += P[i];
         }
         // normalisation
         for (i=0; i<g->n; i++){
             P[i] += (1.-norm_1) / g->n;
-            cvg += absolute(P[i] - Q[i]);
+            cvg += absolute(P[i] - P_prev[i]);
         }
         // convergence test
         if (cvg < EPSILON){
             *t = it;
             return P;
         }
-        Q = P;
+        P_prev = P;
     }
+    free(I);
+    free(P_prev);
     return P;
 }
 
@@ -180,22 +184,22 @@ int main(int argc, char** argv){
     g=readedgelist(argv[1]);
     printf("Number of nodes: %lu\n",g->n);
     printf("Number of edges: %lu\n",g->e);
-    // initilaisation
+    // initialisation
     unsigned long  it = NB_ITERATIONS; // number of page rank iterations
-    unsigned long i; // index
-    unsigned long node;
+    unsigned long i, node; // indexes
     unsigned long highest_node[NB_RESULTS], lowest_node[NB_RESULTS];
     double highest_score[NB_RESULTS], lowest_score[NB_RESULTS];
-    char page_name[NAME_LENGTH];
-    char lowest_page_name[NB_RESULTS][NAME_LENGTH], highest_page_name[NB_RESULTS][NAME_LENGTH];
+    char page_name[NAME_LENGTH], lowest_page_name[NB_RESULTS][NAME_LENGTH], highest_page_name[NB_RESULTS][NAME_LENGTH];
+    unsigned long *degrees_out = calloc(g->n, sizeof(unsigned long));
+    // initializing lower page name (it might be isolated nodes without names)
     for (i=0; i<NB_RESULTS; i++){
         strcpy(lowest_page_name[i], "NO PAGE NAME");
     }
-    // nodes' degrees out
-    unsigned long *degrees = degree_out(g, argv[3]); // node degrees
+    // computing nodes' degrees out
+    degree_out(g, degrees_out, argv[3]);
     printf("Computing the degree out of each node: done.\n");
-    // PageRank
-    double *P = power_iteration(g, degrees, &it); // page rank
+    // using power_iteration algorithm to compute PageRank
+    double *P = power_iteration(g, degrees_out, &it); // page rank
     printf("Computing PageRank: done.\n");
     // sorting results by score
     page_rank *P_rank = malloc(g->n*sizeof(page_rank));
@@ -230,45 +234,45 @@ int main(int argc, char** argv){
     printf("Reading page names: done.\n");
     // printing results
     printf("\nPageRank results with alpha = %f:\n", ALPHA);
-    printf("\nNumber of iterations necessary to reach convergence: %lu.\n", it);
+    printf("\nNumber of iterations necessary to reach convergence: %lu\n", it);
     printf("\nThe %i pages with the highest PageRank:\n", NB_RESULTS);
     for (i=0; i<NB_RESULTS; i++){
         printf("%lu: ", i+1);
         printf("Node %lu ", highest_node[i]);
-        printf("with score %f ", highest_score[i]);
+        printf("with score %0.10f ", highest_score[i]);
         printf("and name %s\n", highest_page_name[i]);
     }
     printf("\nThe %i pages with the lowest PageRank:\n", NB_RESULTS);
     for (i=0; i<NB_RESULTS; i++){
         printf("%lu: ", i+1);
         printf("Node %lu ", lowest_node[i]);
-        printf("with score %f ", lowest_score[i]);
+        printf("with score %0.10f ", lowest_score[i]);
         printf("and name %s\n", lowest_page_name[i]);
     }
     // writing results in file
     FILE *f = fopen(argv[4], "w");
     fprintf(f, "PageRank results with alpha = %f:\n", ALPHA);
-    fprintf(f, "\nNumber of iterations necessary to reach convergence: %lu.\n", it);
+    fprintf(f, "\nNumber of iterations necessary to reach convergence: %lu\n", it);
     fprintf(f, "\nThe %i pages with the highest PageRank:\n", NB_RESULTS);
     for (i=0; i<NB_RESULTS; i++){
         fprintf(f, "%lu: ", i+1);
         fprintf(f, "Node %lu ", highest_node[i]);
-        fprintf(f, "with score %f ", highest_score[i]);
+        fprintf(f, "with score %0.10f ", highest_score[i]);
         fprintf(f, "and name %s\n", highest_page_name[i]);
     }
     fprintf(f, "\nThe %i pages with the lowest PageRank:\n", NB_RESULTS);
     for (i=0; i<NB_RESULTS; i++){
         fprintf(f, "%lu: ", i+1);
         fprintf(f, "Node %lu ", lowest_node[i]);
-        fprintf(f, "with score %f ", lowest_score[i]);
+        fprintf(f, "with score %0.10f ", lowest_score[i]);
         fprintf(f, "and name %s\n", lowest_page_name[i]);
     }
     fprintf(f, "\nFull PageRank results:\n");
     for (i=0; i<g->n; i++){
-        fprintf(f, "%lu %f\n", i, P[i]);
+        fprintf(f, "%lu %0.15f\n", i, P[i]);
     }
     fclose(f);
-    free(degrees);
+    free(degrees_out);
     free(P);
     free_edgelist(g);
     t2=time(NULL);
