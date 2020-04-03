@@ -298,6 +298,40 @@ python3 draw_graph_community.py graphs/random9_p0.9_q0.1.txt results/random9_com
 
 The result is for instance `figures/random9_p0.9_q0.1_labels.png` that represents the graph and color the nodes using a different color for each community.
 
+## Louvain 
+
+Change the current working directory to `louvain`:
+
+
+```
+cd louvain
+```
+
+This package offers a set of functions to use in order to compute communities on graphs weighted or unweighted. 
+
+### To compile
+```
+make
+```
+
+### To execute
+
+A typical sequence of actions is:
+
+1. Conversion from a text format (one edge on each line (two unsigned long (nodes' ID) separated by a space)
+```
+./convert -i ../graphs/random9_p0.9_q0.1.txt -o ../graphs/random9_p0.9_q0.1.bin
+```
+2. Computes communities with a specified quality function and displays hierarchical tree. To ensure a faster computation (with a loss of quality), one can use the -e option to specify that the program must stop if the increase of
+modularity is below epsilon for a given iteration or pass:
+``` 
+./louvain ../graphs/random9_p0.9_q0.1.bin -l -1 -q id_qual -e 0.001 > ../results/random9_p0.9_q0.1_louvain.txt
+```
+3. Displays information on the tree structure (number of hierarchical
+levels and nodes per level):
+``` 
+./hierarchy ../results/random9_p0.9_q0.1_louvain.txt
+```
 
 # Credits
 >**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph
