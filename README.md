@@ -90,12 +90,15 @@ gcc diameter.c -O3 -o diameter
 
 ### To execute:
 
-The program expects the following arguments: `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
- 
+The program expects the following arguments: 
+
+* `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
+* `results.txt` for writing the results.
+  
 As an example, one can run the following command:
 
 ```
-./diameter graphs/tuto_graph.txt
+./diameter graphs/tuto_graph.txt results/tuto_diameter.txt
 ```
 
 ## Triangles

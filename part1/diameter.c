@@ -1,11 +1,11 @@
 /*
- The program will load the graph in main memory and compute a good lower bound to the diameter of a graph. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space).
+ The program will load the graph in main memory and compute a good lower bound to the diameter of a graph. The program expects an argument `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); and an argument `results.txt` for writing the results.
  
 To compile:
 "gcc diameter.c -O3 -o diameter".
 
 To execute:
-"./diameter graphs/edgelist.txt".
+"./diameter graphs/edgelist.txt results/tuto_diameter.txt".
 */
 
 #include <stdlib.h>
@@ -133,11 +133,13 @@ unsigned long bfs(adjlist *g, unsigned long s, unsigned long *diameter){
 }
 
 // computing a good lower bound to the diameter of a graph
-unsigned long lower_bound_diameter(adjlist *g){
+unsigned long lower_bound_diameter(adjlist *g, unsigned long seed){
     // initializing the diameter, the source node and an index
     unsigned long diameter, s, i;
     // to save the nodes
     unsigned long nodes[NITER];
+    // use a different seed value so that we do not get same result each time we run this program
+    srand (time(NULL)+seed);
     // setting the source node to the first random node which has at least one neighbor
     s = rand() % (g->n);
     while (g->cd[s+1] == g->cd[s])
@@ -172,7 +174,18 @@ int main(int argc, char** argv){
     mkadjlist(g);
     // computing a good lower bound to the diameter of a graph
     printf("Diameter algorithm:\n");
-    printf("A lower bound to the diameter of a graph is %lu\n", lower_bound_diameter(g));
+    printf("    First pass:\n");
+    unsigned long bound1 = lower_bound_diameter(g, 1);
+    printf("    Second pass:\n");
+    unsigned long bound2 = lower_bound_diameter(g, 2);
+    printf("    Third pass:\n");
+    unsigned long bound3 = lower_bound_diameter(g, 3);
+    unsigned long best_lower_bound = max3(bound1, bound2, bound3);
+    printf("A lower bound to the diameter of a graph is %lu\n", best_lower_bound);
+    // writing resuls
+    FILE *f = fopen(argv[2], "w");
+    fprintf(f, "A lower bound to the diameter of a graph is %lu\n", best_lower_bound);
+    fclose(f);
     free_adjlist(g);
     t2=time(NULL);
     printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));

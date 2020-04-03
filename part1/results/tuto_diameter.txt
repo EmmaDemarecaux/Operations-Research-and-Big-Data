@@ -1,0 +1,1 @@
+A lower bound to the diameter of a graph is 4
