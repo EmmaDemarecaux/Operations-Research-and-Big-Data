@@ -335,3 +335,5 @@ levels and nodes per level):
 
 # Credits
 >**Maximilien DANISCH** http://bit.ly/danisch http://github.com/maxdan94/LoadGraph
+
+>http://sourceforge.net/projects/louvain/files/latest/download
