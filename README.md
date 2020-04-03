@@ -183,7 +183,6 @@ As an example, one can run the following command:
 
 If one want to look at the following correlations for the [Wikipedia](http://cfinder.org/wiki/?n=Main.Data#toc1) dataset:
 
-
 * x = PageRank with α = 0.15, y = in-degree;
 * x = PageRank with α = 0.15, y = out-degree;
 * x = PageRank with α = 0.15, y = PageRank with α = 0.1; 
@@ -191,11 +190,13 @@ If one want to look at the following correlations for the [Wikipedia](http://cfi
 * x = PageRank with α = 0.15, y = PageRank with α = 0.5;
 * x = PageRank with α = 0.15, y = PageRank with α = 0.9.
 
-one can first collect the results from the file `correlation.c` and then run
+one can first collect the results using `correlation.c` and then run
 
 ```
 python3 correlations.py
 ```
+
+The figures can be found in the folder `part2/figures/`.
 
 ## k-core decomposition
 

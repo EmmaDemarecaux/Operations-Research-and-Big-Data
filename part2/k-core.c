@@ -152,7 +152,7 @@ void swap(unsigned long *a, unsigned long *b){
 
 unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *output){
     // initialisation
-    unsigned long i, j, a, b, v, node, node_degree, v_degree, visited_neighbor;
+    unsigned long i, j, a, b, u, v, u_degree, v_degree, visited_neighbor;
     unsigned long c = 0, degree_max = 0;
     // computing maximum degree
     for (i=0; i<g->n; i++){
@@ -174,31 +174,31 @@ unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *outpu
     order_nodes_by_degree(g, degrees, ordered_nodes_by_degree, start_degrees_index, nodes_index_ordering, degree_max);
     // loop of the list of ordered nodes by degree
     for (i=0; i<g->n; i++){
-        // node
-        node = ordered_nodes_by_degree[i];
-        // node degree
-        node_degree = degrees[node];
+        // node u
+        u = ordered_nodes_by_degree[i];
+        // degree of node u
+        u_degree = degrees[u];
         // initializing variable that detects if we visited at least 1 neighbor for this node
         visited_neighbor = 0;
         // updating max core value
-        if (node_degree > c){
-            c = node_degree;
+        if (u_degree > c){
+            c = u_degree;
         }
-        // setting core value of the node
-        nodes_core[node] = c;
-        // setting node degree to inf so that it will not be considered anymore
-        degrees[node] = ULONG_MAX;
-        // removing node from graph
-        if (node_degree > 0){
+        // setting core value of the node u
+        nodes_core[u] = c;
+        // setting degree of node u to inf so that it will not be considered anymore
+        degrees[u] = ULONG_MAX;
+        // removing node u from graph
+        if (u_degree > 0){
             // loop over its neighbors to decrease their degree
-            for (j=g->cd[node]; j<g->cd[node+1]; j++){
-                // v neighbor of node
+            for (j=g->cd[u]; j<g->cd[u+1]; j++){
+                // v neighbor of u
                 v = g->adj[j];
                 // v degree
                 v_degree = degrees[v];
                 // considering only nodes with degree < inf
                 if (v_degree != ULONG_MAX){
-                    // decrement v degree as we remove node from the graph
+                    // decrement v degree as we remove u from the graph
                     degrees[v]--;
                     // swap node v in ordered_nodes_by_degree to "reorder" the list
                     if (i < start_degrees_index[v_degree]){
@@ -221,7 +221,7 @@ unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *outpu
                         start_degrees_index[v_degree] = start_degrees_index[v_degree] + 2;
                         start_degrees_index[v_degree - 1] ++;
                     }
-                    // set visited_neighbor to 1 as we just visited one neighbor of node
+                    // set visited_neighbor to 1 as we just visited one neighbor of node u
                     visited_neighbor = 1;
                 }
             }
@@ -255,8 +255,10 @@ int main(int argc, char** argv){
     mkadjlist(g);
     // computing degree of each node
     unsigned long *degrees = degree(g, argv[2]);
+    printf("Computing the degree of each node: done.\n");
     // computing core value of each node
     unsigned long core_value = core_decomposition(g, degrees, argv[3]);
+    printf("Computing the k-core decomposition: done.\n");
     printf("Graph core value = %lu\n", core_value);
     free(degrees);
     free_adjlist(g);
