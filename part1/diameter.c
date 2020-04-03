@@ -181,10 +181,10 @@ int main(int argc, char** argv){
     printf("    Third pass:\n");
     unsigned long bound3 = lower_bound_diameter(g, 3);
     unsigned long best_lower_bound = max3(bound1, bound2, bound3);
-    printf("A lower bound to the diameter of a graph is %lu\n", best_lower_bound);
+    printf("Lower bound to the diameter: %lu\n", best_lower_bound);
     // writing resuls
     FILE *f = fopen(argv[2], "w");
-    fprintf(f, "A lower bound to the diameter of a graph is %lu\n", best_lower_bound);
+    fprintf(f, "Lower bound to the diameter: %lu\n", best_lower_bound);
     fclose(f);
     free_adjlist(g);
     t2=time(NULL);
