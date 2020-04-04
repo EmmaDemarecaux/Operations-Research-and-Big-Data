@@ -8,6 +8,7 @@ input_graph = 'results/net_k-core.txt'
 input_degrees = 'results/net_degrees.txt'
 title = 'Google Scholar'
 output = 'figures/net_coreness_degree.png'
+names_file = 'graphs/ID.txt'
 
 if __name__ == '__main__':
     
@@ -34,6 +35,7 @@ if __name__ == '__main__':
     core_df['tuple'] = list(zip(core_df['cores'], core_df['degrees']))
     density_dict = core_df['tuple'].value_counts().to_dict()
     core_df['density'] = [density_dict[i] for i in zip(core_df['cores'], core_df['degrees'])]
+    # degree-coreness plot
     fig, ax = plt.subplots()
     ax.set(xscale='log', yscale='log')
     ax = sns.lineplot(x=np.arange(0.7, max(cores)+7, 0.01), 
@@ -47,3 +49,16 @@ if __name__ == '__main__':
     plt.ylabel('Coreness')  # Set y-axis label
     plt.savefig(output)
     plt.show()
+    # anomalous authors are the vertices with the highest corenes
+    c = max(cores)
+    anomalous_nodes = [i for (i,j) in enumerate(cores) if j==c]
+    # find names
+    file = open(names_file, "r")
+    names = []
+    print("Anomalous Authors:\n")
+    for line in file:
+        if int(line.split(None, 1)[0]) in anomalous_nodes:
+            names.append((int(line.split(None, 1)[0]), line.split(None, 1)[1][:-1]))
+            print(int(line.split(None, 1)[0]), ": ", line.split(None, 1)[1][:-1])
+    file.close()
+    
