@@ -94,22 +94,29 @@ void free_adjlist(adjlist *g){
     free(g);
 }
 
-unsigned long* degree(adjlist *g, char *output){
-    unsigned long *degrees = calloc(g->n, sizeof(unsigned long));
+// computing nodes' degree as well as the degree max
+unsigned long degree(adjlist *g, unsigned long *degrees, char *output){
     unsigned long l, i;
+    unsigned long degree_max = 0;
+    // computing nodes' degree
     for (l=0; l<g->e; l++){
         degrees[g->edges[l].s]++;
         degrees[g->edges[l].t]++;
     }
+    // writing results and omputing maximum degree
     FILE *f = fopen(output, "w");
     for (i=0; i<g->n; i++){
         fprintf(f,"%lu %lu\n", i, degrees[i]);
+        if (degrees[i] > degree_max){
+            degree_max = degrees[i];
+        }
     }
     fclose(f);
-    return degrees;
+    degree_max++;
+    return degree_max;
 }
 
-void order_nodes_by_degree(adjlist* g, unsigned long *degrees, unsigned long *ordered_nodes, unsigned long *start_degrees, unsigned long *nodes_index, unsigned long degree_max){
+void order_nodes_by_degree(adjlist* g, unsigned long *degrees, unsigned long degree_max, unsigned long *ordered_nodes, unsigned long *start_degrees, unsigned long *nodes_index){
     // initialisation
     unsigned long j, d, index, node;
     unsigned long i = 0;
@@ -150,28 +157,21 @@ void swap(unsigned long *a, unsigned long *b){
     *b = temp;
 }
 
-unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *output){
+unsigned long core_decomposition(adjlist* g, unsigned long *degrees, unsigned long degree_max, char *output){
     // initialisation
     unsigned long i, j, a, b, u, v, u_degree, v_degree, visited_neighbor;
-    unsigned long c = 0, degree_max = 0;
-    // computing maximum degree
-    for (i=0; i<g->n; i++){
-        if (degrees[i] > degree_max){
-            degree_max = degrees[i];
-        }
-    }
-    degree_max++;
-    // allocate memory for arrays
+    unsigned long c = 0; // core value
+    // allocating memory for arrays
+    // -- to keep track of the core of each node
+    unsigned long *nodes_core = calloc(g->n, sizeof(unsigned long));
     // -- ordered list of nodes by degree asc
     unsigned long *ordered_nodes_by_degree = malloc(g->n*sizeof(unsigned long));
-    // -- to keep track of location of indexes where each degree starts
+    // -- to keep track of indexes where each degree section starts
     unsigned long *start_degrees_index = malloc(degree_max*sizeof(unsigned long));
     // -- to keep track of location of each node in ordered_nodes_by_degree
     unsigned long *nodes_index_ordering = malloc(g->n*sizeof(unsigned long));
-    // -- to keep track of the core of each node
-    unsigned long *nodes_core = calloc(g->n, sizeof(unsigned long));
     // ordering nodes by degree asc
-    order_nodes_by_degree(g, degrees, ordered_nodes_by_degree, start_degrees_index, nodes_index_ordering, degree_max);
+    order_nodes_by_degree(g, degrees, degree_max, ordered_nodes_by_degree, start_degrees_index, nodes_index_ordering);
     // loop of the list of ordered nodes by degree
     for (i=0; i<g->n; i++){
         // node u
@@ -198,26 +198,32 @@ unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *outpu
                 v_degree = degrees[v];
                 // considering only nodes with degree < inf
                 if (v_degree != ULONG_MAX){
-                    // decrement v degree as we remove u from the graph
+                    // decreasing degree of v by one as we remove u from the graph
                     degrees[v]--;
-                    // swap node v in ordered_nodes_by_degree to "reorder" the list
+                    // swap node v in ordered_nodes_by_degree to put it in its degree section to "reorder" ordered_nodes_by_degree
                     if (i < start_degrees_index[v_degree]){
                         a = start_degrees_index[v_degree];
                         b = nodes_index_ordering[v];
+                        // update ordered_nodes_by_degree
                         swap(&ordered_nodes_by_degree[a], &ordered_nodes_by_degree[b]);
+                        // update nodes_index_ordering
                         swap(&nodes_index_ordering[ordered_nodes_by_degree[a]],
                              &nodes_index_ordering[ordered_nodes_by_degree[b]]);
+                        // update start_degrees_index
                         start_degrees_index[v_degree]++;
                         if (visited_neighbor != 1){
-                            start_degrees_index[node_degree]++;
+                            start_degrees_index[u_degree]++;
                         }
                     }
                     else{
                         a = i+1;
                         b = nodes_index_ordering[v];
+                        // update ordered_nodes_by_degree
                         swap(&ordered_nodes_by_degree[a], &ordered_nodes_by_degree[b]);
+                        // update nodes_index_ordering
                         swap(&nodes_index_ordering[ordered_nodes_by_degree[a]],
                              &nodes_index_ordering[ordered_nodes_by_degree[b]]);
+                        // update start_degrees_index
                         start_degrees_index[v_degree] = start_degrees_index[v_degree] + 2;
                         start_degrees_index[v_degree - 1] ++;
                     }
@@ -227,10 +233,6 @@ unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *outpu
             }
         }
     }
-    // freeing memory
-    free(ordered_nodes_by_degree);
-    free(start_degrees_index);
-    free(nodes_index_ordering);
     // writing results
     FILE *f = fopen(output, "w");
     fprintf(f,"Graph core value = %lu\n", c);
@@ -238,6 +240,11 @@ unsigned long core_decomposition(adjlist* g, unsigned long *degrees, char *outpu
         fprintf(f,"%lu %lu\n", i, nodes_core[i]);
     }
     fclose(f);
+    // freeing memory
+    free(ordered_nodes_by_degree);
+    free(start_degrees_index);
+    free(nodes_index_ordering);
+    free(nodes_core);
     return c;
 }
 
@@ -254,10 +261,11 @@ int main(int argc, char** argv){
     printf("Building the adjacency list\n");
     mkadjlist(g);
     // computing degree of each node
-    unsigned long *degrees = degree(g, argv[2]);
+    unsigned long *degrees = calloc(g->n, sizeof(unsigned long));
+    unsigned long degree_max = degree(g, degrees, argv[2]);
     printf("Computing the degree of each node: done.\n");
     // computing core value of each node
-    unsigned long core_value = core_decomposition(g, degrees, argv[3]);
+    unsigned long core_value = core_decomposition(g, degrees, degree_max, argv[3]);
     printf("Computing the k-core decomposition: done.\n");
     printf("Graph core value = %lu\n", core_value);
     free(degrees);
