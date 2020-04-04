@@ -10,14 +10,12 @@ if __name__ == '__main__':
     nodes = []
     communities = []
     file_graph = open(sys.argv[1], "r")
-#    file_graph = open(tt = , "r")
     for line in file_graph:
         i = int(line.split(None, 1)[0])
         j = int(line.split(None, 1)[1][:-1])
         edges.append((i, j))
     file_graph.close()
     file_communities = open(sys.argv[2], "r")
-#    file_communities = open("results/random9_communities.txt", "r")
     for line in file_communities:
         node = int(line.split(None, 1)[0])
         community = int(line.split(None, 1)[1][:-1])

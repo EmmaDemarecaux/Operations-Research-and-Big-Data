@@ -1,16 +1,15 @@
 /*
-The program is the implementation of PageRank using the power iteration method.
+The program is the implementation of the label propagation algorithm.
 
 The program expects the following arguments:
-- edgelist.txt that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space;
-- degrees.txt for writing the degree of each node;
-- results.txt for writing the results of the PageRank algorithm.
- 
+- edgelist.txt that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space);
+- results.txt for writing the resulting partition: one node and its community id on each line.
+
 To compile:
-"gcc k-core.c -O3 -o k-core".
+"gcc label_propagation.c -O3 -o label_propagation".
 
 To execute:
-"./k-core graphs/tuto_graph.txt results/tuto_degrees.txt results/tuto_k-core.txt".
+"./label_propagation graphs/random9_p0.9_q0.1.txt results/random9_communities.txt".
 */
 
 
@@ -94,14 +93,14 @@ void free_adjlist(adjlist *g){
     free(g);
 }
 
-// A utility function to swap array elements
+// a utility function to swap array elements
 void swap (unsigned long *a, unsigned long *b){
     unsigned long temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// A function to generate a random permutation of arr[]
+// a function to generate a random permutation of arr[]
 void randomize(unsigned long *arr, unsigned long n){
     // Use a different seed value so that we don't get same
     // result each time we run this program
@@ -117,22 +116,24 @@ void randomize(unsigned long *arr, unsigned long n){
     }
 }
 
-// A utility function to print an array
-void printArray(unsigned long *arr, unsigned long n){
+// a utility function to print an array
+void print_array(unsigned long *arr, unsigned long n){
     for (unsigned long i = 0; i < n; i++)
         printf("%lu ", arr[i]);
     printf("\n");
 }
 
+// find the max frequency using linear traversal
 unsigned long most_frequent(unsigned long *neigbors_labels, unsigned long size, unsigned long n, unsigned long curr_label){
-    // find the max frequency using linear traversal
     unsigned long i, index_res, res;
     unsigned long index = 0, to_keep = 0, max_frequence = 0;
     unsigned long *freq = calloc(n, sizeof(unsigned long));
     unsigned long *max_freq = malloc(size*sizeof(unsigned long));
+    // computing label frequencies
     for (i=0; i<size; i++){
         freq[neigbors_labels[i]]++;
     }
+    // finding labels with the highest label frequency
     for (i=0; i<n; i++){
         if (freq[i] > 0){
             if (freq[i] > max_frequence){
@@ -147,58 +148,70 @@ unsigned long most_frequent(unsigned long *neigbors_labels, unsigned long size, 
             }
         }
     }
+    // looping over the label with the highest frequency
     for (i=0; i<index; i++){
-        if (max_freq[i] == curr_label){
-            to_keep = 1;
+        if (max_freq[i] == curr_label){ // if current label of the node has the highest frequency
+            to_keep = 1; // keeping the current label
             res = curr_label;
         }
     }
-    if (to_keep == 0){
-        index_res = rand() % index;
+    if (to_keep == 0){ // if current label of the node does not have the highest frequency
+        index_res = rand() % index; // pick a label at random among the one with the highest frequency
         res = max_freq[index_res];
     }
+    free(freq);
+    free(max_freq);
     return res;
 }
 
+// label propagation Algorithm
 void label_prop(adjlist* g, unsigned long *nodes, unsigned long *labels){
     // initialisation
-    unsigned long i, j, v, index, node, size, node_label, new_label;
+    unsigned long i, j, u, v, index, size, label, new_label;
     unsigned long c = 0, degree_max = 0, counter = 0;
     unsigned long *neigbors_labels = malloc((g->n-1)*sizeof(unsigned long));
-    
-    while (counter < g->n){
+    while (counter < g->n){ // check if there exists a node with a label that does not have the highest frequency among its neighbours.
+        // shuffling nodes
         randomize(nodes, g->n);
+        // initializing number of nodes with a label that is the highest frequency among its neighbours
         counter = 0;
+        // looping over the nodes in the random order
         for (i=0; i<g->n; i++){
-            node = nodes[i];
-            size = g->cd[node+1]-g->cd[node];
-            node_label = labels[node];
-            if (size == 0){
-                counter++;
+            // node
+            u = nodes[i];
+            // degree of the node
+            size = g->cd[u+1]-g->cd[u];
+            // label of the node
+            label = labels[u];
+            if (size == 0){ // if 0 neighbor
+                counter++; // the node has a label that is the highest frequency among its neighbours
             }
-            else if (size == 1){
-                v = g->adj[g->cd[node]];
-                if (labels[v] == node_label)
+            else if (size == 1){ // if only 1 neighbor
+                v = g->adj[g->cd[u]]; // v neighbor of u
+                if (labels[v] == label) // if they already have the same label, do nothing and increment the counter
                     counter++;
                 else
-                    labels[node] = labels[v];
+                    labels[u] = labels[v]; // otherwise, set the label of the node to its neighbor's
             }
-            else{
+            else{ // if the node has more than 1 neighbors
                 index = 0;
-                for (j=g->cd[node]; j<g->cd[node+1]; j++){
+                // looping over u's neighbors to collect the labels in "neigbors_labels"
+                for (j=g->cd[u]; j<g->cd[u+1]; j++){
                     v = g->adj[j];
                     neigbors_labels[index] = labels[v];
                     index++;
                 }
-                new_label = most_frequent(neigbors_labels, size, g->n, node_label);
-                if (new_label == node_label){
+                // finding the most frequent label (the case of equality is handled in the function "most_frequent")
+                new_label = most_frequent(neigbors_labels, size, g->n, label);
+                if (new_label == label){ // if they already have the same label, do nothing and increment the counter
                     counter++;
                 }
                 else
-                    labels[node] = new_label;
+                    labels[u] = new_label; // otherwise, set the label to the most frequent label
             }
         }
     }
+    free(neigbors_labels);
 }
 
 int main(int argc, char** argv){
@@ -212,26 +225,34 @@ int main(int argc, char** argv){
     printf("Number of edges: %lu\n",g->e);
     printf("Building the adjacency list\n");
     mkadjlist(g);
-    
+    // allocating memory
     unsigned long *labels = malloc(g->n*sizeof(unsigned long));
     unsigned long *nodes = malloc(g->n*sizeof(unsigned long));
     unsigned long node = 0, max_print = 100;
     if (g->n < max_print)
         max_print = g->n;
+    // giving a unique label to each node in the network
     for (node=0; node<g->n; node++){
         labels[node] = node;
         nodes[node] = node;
     }
+    // printing initial labels
     printf("Initial labels\n");
-    printArray(labels, max_print);
+    print_array(labels, max_print);
+    // doing label propagation algorithm
     label_prop(g, nodes, labels);
+    // writing results
     FILE *f = fopen(argv[2], "w");
     for (node=0; node<g->n; node++){
         fprintf(f,"%lu %lu\n", node, labels[node]);
     }
     fclose(f);
+    // printing final labels
     printf("Final labels\n");
-    printArray(labels, max_print);
+    print_array(labels, max_print);
+    // freeing memory
+    free(labels);
+    free(nodes);
     free_adjlist(g);
     t2=time(NULL);
     printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));

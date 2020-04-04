@@ -1,10 +1,10 @@
 /*
-The program is the implementation of PageRank using the power iteration method.
+The program is the implementation of the core decomposition algorithm.
 
 The program expects the following arguments:
 - edgelist.txt that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space;
 - degrees.txt for writing the degree of each node;
-- results.txt for writing the results of the PageRank algorithm.
+- results.txt for writing the results of the k-core algorithm.
  
 To compile:
 "gcc k-core.c -O3 -o k-core".

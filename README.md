@@ -214,7 +214,7 @@ The program expects the following arguments:
  
  * `edgelist.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
  * `degrees.txt` for writing the degree of each node;
- * `results.txt` for writing the results of the PageRank algorithm.
+ * `results.txt` for writing the results of the k-core algorithm.
 
 As an example, one can run the following command:
 

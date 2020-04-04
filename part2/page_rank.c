@@ -274,6 +274,7 @@ int main(int argc, char** argv){
     fclose(f);
     free(degrees_out);
     free(P);
+    free(P_rank);
     free_edgelist(g);
     t2=time(NULL);
     printf("\n- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
