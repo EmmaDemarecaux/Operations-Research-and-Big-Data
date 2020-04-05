@@ -41,15 +41,15 @@ def generate_random_graph(n, c, p, q):
 
 if __name__ == '__main__':
     
-    n = 100
+    n = 400
     c = 4
-    P = [0.9, 0.8, 0.7, 0.6, 0.9, 0.7, 0.6, 0.5, 0.6, 0.3]
-    Q = [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3]
+    P = [0.9, 0.8, 0.7, 0.6, 0.9, 0.7, 0.6, 0.5, 0.6, 0.6, 0.6, 0.3]
+    Q = [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.15, 0.2, 0.3, 0.3]
     for (p, q) in zip(P,Q):
         # create random graph
         G, clusters = generate_random_graph(n, c, p, q)
         # save graph
-        file_name = str(int(round(p/q, 0))) + "_p" + str(round(p, 2)) + "_q" + str(round(q, 2))
+        file_name = "_n" + str(n) + "_c" + str(c) + "_pq" + str(int(round(p/q, 0))) + "_p" + str(round(p, 2)) + "_q" + str(round(q, 2))
         res_file = open("graphs/random" + file_name + ".txt", "w")
         res_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in G.edges()])
         res_file.close()

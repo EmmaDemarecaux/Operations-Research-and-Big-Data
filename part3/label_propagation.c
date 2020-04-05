@@ -228,7 +228,7 @@ int main(int argc, char** argv){
     // allocating memory
     unsigned long *labels = malloc(g->n*sizeof(unsigned long));
     unsigned long *nodes = malloc(g->n*sizeof(unsigned long));
-    unsigned long node = 0, max_print = 100;
+    unsigned long node = 0, max_print = 400;
     if (g->n < max_print)
         max_print = g->n;
     // giving a unique label to each node in the network

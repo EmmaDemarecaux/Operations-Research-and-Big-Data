@@ -124,7 +124,7 @@ As an example, one can run the following command:
 ./triangles graphs/tuto_graph.txt results/tuto_triangles.txt
 ```
 
-# Part 2
+# Part 2: PageRank and k-core
 
 Change the current working directory to `part2`:
 ```
@@ -235,7 +235,7 @@ python3 k-core_plot.py
 Using the google scholar dataset, the result is `figures/net_coreness_degree.png` that represents the graph.
 
 
-# Part 3
+# Part 3: Community detection
 
 Change the current working directory to `part3`:
 ```
@@ -258,9 +258,9 @@ python3 random_graph.py
 
 The results are for instance:
 
- * `graphs/random9_p0.9_q0.1.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
- * `results/random9_p0.9_q0.1_clusters.txt` that should contain the true cluster partition: one node and its cluster id on each line;
- * `figures/random9_p0.9_q0.1.png` that represents the graph and color the nodes using a different color for each cluster.
+ * `graphs/random_n400_c4_pq9_p0.9_q0.1.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
+ * `results/random_n400_c4_pq9_p0.9_q0.1_clusters.txt` that should contain the true cluster partition: one node and its cluster id on each line;
+ * `figures/random_n400_c4_pq9_p0.9_q0.1.png` that represents the graph and color the nodes using a different color for each cluster.
 
 ## Label propagation
 
@@ -282,7 +282,7 @@ The program expects the following arguments:
 As an example, one can run the following command:
 
 ```
-./label_propagation graphs/random9_p0.9_q0.1.txt results/random9_communities.txt
+./label_propagation graphs/random_n400_c4_pq9_p0.9_q0.1.txt results/random_n400_c4_pq9_communities.txt
 ```
 
 To draw the graph and color the nodes using a different color for each community with Python, `draw_graph_community.py` expects the following arguments:
@@ -293,10 +293,10 @@ To draw the graph and color the nodes using a different color for each community
 As an example, one can run the following command:
 
 ```
-python3 draw_graph_community.py graphs/random9_p0.9_q0.1.txt results/random9_communities.txt
+python3 draw_graph_community.py graphs/random_n400_c4_pq9_p0.9_q0.1.txt results/random_n400_c4_pq9_communities.txt
 ```
 
-The result is for instance `figures/random9_p0.9_q0.1_labels.png` that represents the graph and color the nodes using a different color for each community.
+The result is for instance `figures/random_n400_c4_pq9_p0.9_q0.1_labels.png` that represents the graph and color the nodes using a different color for each community.
 
 ## Louvain 
 
