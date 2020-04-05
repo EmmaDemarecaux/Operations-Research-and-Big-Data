@@ -320,17 +320,78 @@ A typical sequence of actions is:
 
 1. Conversion from a text format (one edge on each line (two unsigned long (nodes' ID) separated by a space)
 ```
-./convert -i ../graphs/random9_p0.9_q0.1.txt -o ../graphs/random9_p0.9_q0.1.bin
+./convert -i ../graphs/random_n800_c4_pq14_p0.7_q0.05.txt -o ../graphs/random_n800_c4_pq14_p0.7_q0.05.bin
 ```
 2. Computes communities with a specified quality function and displays hierarchical tree. To ensure a faster computation (with a loss of quality), one can use the -e option to specify that the program must stop if the increase of
 modularity is below epsilon for a given iteration or pass:
 ``` 
-./louvain ../graphs/random9_p0.9_q0.1.bin -l -1 -q id_qual -e 0.001 > ../results/random9_p0.9_q0.1_louvain.txt
+./louvain -v ../graphs/random_n800_c4_pq14_p0.7_q0.05.bin -l -1 -q id_qual -e 0.001 > ../results/random_n800_c4_pq14_p0.7_q0.05_louvain.txt
 ```
 3. Displays information on the tree structure (number of hierarchical
 levels and nodes per level):
 ``` 
-./hierarchy ../results/random9_p0.9_q0.1_louvain.txt
+./hierarchy ../results/random_n400_c4_pq9_p0.9_q0.1_louvain.txt
+```
+
+## [LFR](http://github.com/eXascaleInfolab/LFR-Benchmark_UndirWeightOvp) benchmark
+
+Change the current working directory to `LFR-Benchmark`:
+
+```
+cd LFR-Benchmark
+```
+
+Extended version of the Lancichinetti-Fortunato-Radicchi Benchmark for Undirected Weighted Overlapping networks to evaluate clustering algorithms. 
+
+This program is an implementation of the algorithm described in the paper "Directed, weighted and overlapping benchmark graphs for community detection algorithms", written by Andrea Lancichinetti and Santo Fortunato. In particular, this program is to produce undirected weighted networks with overlapping nodes. By default, there is no overlapping node.
+### To compile
+```
+make
+```
+
+### To execute
+
+```
+./benchmark -N 128 -k 16 -maxk 16 -muw 0.01 -minc 32 -maxc 32 -beta 1
+```
+
+```
+./benchmark -N 384 -k 16 -maxk 16 -muw 0.01 -minc 32 -maxc 32 -beta 1
+```
+
+``` 
+./benchmark -N 400 -k 5 -maxk 50 -muw 0.1 -minc 20 -maxc 50 -beta 1
+```
+
+``` 
+./benchmark -N 400 -k 5 -maxk 50 -muw 0.1 -minc 50 -maxc 100 -beta 1
+```
+
+### To convert the results to text files 
+
+```
+cd ..
+python3 python3 lfr_benchmark.py
+```
+
+The results are for instance:
+
+ * `graphs/lfr_n128_c4.txt` that should contain the graph: one edge on each line (two unsigned long (nodes' ID) separated by a space); 
+ * `results/lfr_n128_c4.txt` that should contain the true cluster partition: one node and its cluster id on each line;
+ * `figures/lfr_n128_c4.png` that represents the graph and color the nodes using a different color for each cluster.
+
+## Evaluate the accuracy of the algorithms using the benchmarks
+
+Change the current working directory to `part3`:
+
+```
+cd ..
+```
+
+### To execute
+
+```
+python3 metrics.py
 ```
 
 # Credits

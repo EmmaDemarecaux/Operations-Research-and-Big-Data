@@ -34,6 +34,8 @@
 #include "graph_binary.h"
 #include "louvain.h"
 #include <unistd.h>
+#include <sys/resource.h>
+#include <errno.h>
 
 #include "modularity.h"
 #include "zahn.h"
@@ -245,7 +247,8 @@ main(int argc, char **argv) {
   srand(time(NULL)+getpid());
   
   parse_args(argc, argv);
-  
+  struct rusage r_usage;
+  int ret;
   time_t time_begin, time_end;
   time(&time_begin);
   
@@ -310,9 +313,12 @@ main(int argc, char **argv) {
   } while(improvement);
   
   time(&time_end);
+  ret = getrusage(RUSAGE_SELF,&r_usage);
   if (verbose) {
     display_time("End");
     cerr << "Total duration: " << (time_end-time_begin) << " sec" << endl;
+    if (ret == 0)
+      cerr << "Memory usage: " << r_usage.ru_maxrss;
   }
   cerr << new_qual << endl;
   

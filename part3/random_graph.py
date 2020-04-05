@@ -41,11 +41,12 @@ def generate_random_graph(n, c, p, q):
 
 if __name__ == '__main__':
     
+    # random graphs with n=400, c=4 and different values of p/q
     n = 400
     c = 4
     P = [0.9, 0.8, 0.7, 0.6, 0.9, 0.7, 0.6, 0.5, 0.6, 0.6, 0.6, 0.3]
     Q = [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.15, 0.2, 0.3, 0.3]
-    for (p, q) in zip(P,Q):
+    for (p, q) in zip(P, Q):
         # create random graph
         G, clusters = generate_random_graph(n, c, p, q)
         # save graph
@@ -63,3 +64,27 @@ if __name__ == '__main__':
                   ' = ' + str(int(round(p/q, 0))))
         plt.savefig("figures/random" + file_name + ".png")
         plt.show()
+    
+    # random graphs graphs of different sizes
+    N = [800, 1600, 5000, 10000]
+    C = [4, 4, 5, 5, 5]
+    p = 0.7
+    q = 0.05
+    for (n, c) in zip(N, C):
+        # create random graph
+        G, clusters = generate_random_graph(n, c, p, q)
+        # save graph
+        file_name = "_n" + str(n) + "_c" + str(c) + "_pq" + str(int(round(p/q, 0))) + "_p" + str(round(p, 2)) + "_q" + str(round(q, 2))
+        res_file = open("graphs/random" + file_name + ".txt", "w")
+        res_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in G.edges()])
+        res_file.close()
+        # save clusters
+        clusters_file = open("results/random" + file_name + "_clusters.txt", "w")
+        clusters_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in enumerate(clusters)])
+        clusters_file.close()
+    
+
+
+
+
+

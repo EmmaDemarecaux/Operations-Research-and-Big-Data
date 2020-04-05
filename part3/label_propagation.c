@@ -9,7 +9,7 @@ To compile:
 "gcc label_propagation.c -O3 -o label_propagation".
 
 To execute:
-"./label_propagation graphs/random9_p0.9_q0.1.txt results/random9_communities.txt".
+"./label_propagation graphs/random_n400_c4_pq9_p0.9_q0.1.txt results/random_n400_c4_pq9_communities.txt".
 */
 
 
@@ -17,6 +17,9 @@ To execute:
 #include <stdio.h>
 #include <time.h> // to estimate the runing time
 #include <limits.h>
+#include <sys/resource.h>
+#include <errno.h>
+#include <unistd.h>
 
 #define NLINKS 100000000 // maximum number of edges for memory allocation, will increase if needed
 
@@ -218,6 +221,8 @@ int main(int argc, char** argv){
     // using the adjlist structure
     adjlist* g;
     time_t t1,t2;
+    struct rusage r_usage;
+    int ret;
     t1=time(NULL);
     printf("Reading edgelist from file %s\n",argv[1]);
     g=readedgelist(argv[1]);
@@ -254,7 +259,12 @@ int main(int argc, char** argv){
     free(labels);
     free(nodes);
     free_adjlist(g);
+    // time
     t2=time(NULL);
     printf("- Overall time = %ldh%ldm%lds\n",(t2-t1)/3600,((t2-t1)%3600)/60,((t2-t1)%60));
+    // memory consumption
+    ret = getrusage(RUSAGE_SELF,&r_usage);
+    if (ret == 0)
+        printf("- Memory usage = %ld kilobytes\n", r_usage.ru_maxrss);
     return 0;
 }
