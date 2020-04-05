@@ -2,21 +2,21 @@ import networkx as nx
 from sklearn.metrics.cluster import adjusted_mutual_info_score, adjusted_rand_score, normalized_mutual_info_score
 
 graph_files = ["random_n400_c4_pq9_p0.9_q0.1.txt", "random_n400_c4_pq7_p0.7_q0.1.txt", 
-          "random_n400_c4_pq6_p0.6_q0.1.txt", "random_n400_c4_pq5_p0.5_q0.1.txt", 
-          "random_n400_c4_pq4_p0.6_q0.15.txt", "random_n400_c4_pq3_p0.6_q0.2.txt", 
-          "random_n400_c4_pq2_p0.6_q0.3.txt", "random_n400_c4_pq1_p0.3_q0.3.txt"]
+               "random_n400_c4_pq6_p0.6_q0.1.txt", "random_n400_c4_pq5_p0.5_q0.1.txt", 
+               "random_n400_c4_pq4_p0.6_q0.15.txt", "random_n400_c4_pq3_p0.6_q0.2.txt", 
+               "random_n400_c4_pq2_p0.6_q0.3.txt", "random_n400_c4_pq1_p0.3_q0.3.txt"]
 cluster_files = ["random_n400_c4_pq9_p0.9_q0.1_clusters.txt", "random_n400_c4_pq7_p0.7_q0.1_clusters.txt", 
-            "random_n400_c4_pq6_p0.6_q0.1_clusters.txt", "random_n400_c4_pq5_p0.5_q0.1_clusters.txt", 
-            "random_n400_c4_pq4_p0.6_q0.15_clusters.txt", "random_n400_c4_pq3_p0.6_q0.2_clusters.txt", 
-            "random_n400_c4_pq2_p0.6_q0.3_clusters.txt", "random_n400_c4_pq1_p0.3_q0.3_clusters.txt"]
+                 "random_n400_c4_pq6_p0.6_q0.1_clusters.txt", "random_n400_c4_pq5_p0.5_q0.1_clusters.txt", 
+                 "random_n400_c4_pq4_p0.6_q0.15_clusters.txt", "random_n400_c4_pq3_p0.6_q0.2_clusters.txt", 
+                 "random_n400_c4_pq2_p0.6_q0.3_clusters.txt", "random_n400_c4_pq1_p0.3_q0.3_clusters.txt"]
 lp_files = ["random_n400_c4_pq9_communities.txt", "random_n400_c4_pq7_communities.txt", 
-      "random_n400_c4_pq6_communities.txt", "random_n400_c4_pq5_communities.txt", 
-      "random_n400_c4_pq4_communities.txt", "random_n400_c4_pq3_communities.txt", 
-      "random_n400_c4_pq2_communities.txt", "random_n400_c4_pq1_communities.txt"]
+            "random_n400_c4_pq6_communities.txt", "random_n400_c4_pq5_communities.txt", 
+            "random_n400_c4_pq4_communities.txt", "random_n400_c4_pq3_communities.txt", 
+            "random_n400_c4_pq2_communities.txt", "random_n400_c4_pq1_communities.txt"]
 louvain_files = ["random_n400_c4_pq9_p0.9_q0.1_louvain.txt", "random_n400_c4_pq7_p0.7_q0.1_louvain.txt", 
-           "random_n400_c4_pq6_p0.6_q0.1_louvain.txt", "random_n400_c4_pq5_p0.5_q0.1_louvain.txt", 
-           "random_n400_c4_pq4_p0.6_q0.15_louvain.txt", "random_n400_c4_pq3_p0.6_q0.2_louvain.txt", 
-           "random_n400_c4_pq2_p0.6_q0.3_louvain.txt", "random_n400_c4_pq1_p0.3_q0.3_louvain.txt"]
+                 "random_n400_c4_pq6_p0.6_q0.1_louvain.txt", "random_n400_c4_pq5_p0.5_q0.1_louvain.txt", 
+                 "random_n400_c4_pq4_p0.6_q0.15_louvain.txt", "random_n400_c4_pq3_p0.6_q0.2_louvain.txt", 
+                 "random_n400_c4_pq2_p0.6_q0.3_louvain.txt", "random_n400_c4_pq1_p0.3_q0.3_louvain.txt"]
 
 lfr_graph_files = ["lfr_n128_c4.txt", "lfr_n384_c12.txt"]
 lfr_cluster_files = ["lfr_n128_c4.txt", "lfr_n384_c12.txt"]
@@ -25,6 +25,7 @@ lfr_louvain_files = ["lfr_n128_c4_louvain.txt", "lfr_n384_c12_louvain.txt"]
 
 
 if __name__ == '__main__':
+    
     # benchmark made in question 1
     for k in range(len(graph_files)):
         file_graph = graph_files[k]

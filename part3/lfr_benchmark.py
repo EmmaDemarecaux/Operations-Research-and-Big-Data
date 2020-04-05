@@ -1,20 +1,20 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 if __name__ == '__main__':
+    
     # LFR benchmark
     clusters = []
     for line in open("./LFR-Benchmark/community.dat").readlines():
         clusters.append(int(line.replace('\t',' ').replace('\n',' ').split()[1])-1)
     
     edges = []
-    w = []
     i = 0
     max_node = 0
     for line in open("./LFR-Benchmark/network.dat").readlines():
         if i > 0:
             edge = line.replace('\t',' ').replace('\n',' ').split()
-            w.append(edge[2])
             max_node = max(int(edge[0])-1, int(edge[1])-1, max_node)
             edges.append((int(edge[0])-1, int(edge[1])-1))
         else:
@@ -43,4 +43,3 @@ if __name__ == '__main__':
     clusters_file = open(res_file_name, "w")
     clusters_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in enumerate(clusters)])
     clusters_file.close()
-    

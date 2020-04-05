@@ -39,6 +39,7 @@ def generate_random_graph(n, c, p, q):
     G.add_edges_from(edges)
     return G, clusters
 
+
 if __name__ == '__main__':
     
     # random graphs with n=400, c=4 and different values of p/q
@@ -83,8 +84,3 @@ if __name__ == '__main__':
         clusters_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in enumerate(clusters)])
         clusters_file.close()
     
-
-
-
-
-

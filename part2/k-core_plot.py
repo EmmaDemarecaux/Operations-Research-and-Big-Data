@@ -10,6 +10,7 @@ title = 'Google Scholar'
 output = 'figures/net_coreness_degree.png'
 names_file = 'graphs/ID.txt'
 
+
 if __name__ == '__main__':
     
     nodes = []
