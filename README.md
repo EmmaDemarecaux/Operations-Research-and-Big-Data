@@ -359,19 +359,11 @@ make
 ./benchmark -N 384 -k 16 -maxk 16 -muw 0.01 -minc 32 -maxc 32 -beta 1
 ```
 
-``` 
-./benchmark -N 400 -k 5 -maxk 50 -muw 0.1 -minc 20 -maxc 50 -beta 1
-```
-
-``` 
-./benchmark -N 400 -k 5 -maxk 50 -muw 0.1 -minc 50 -maxc 100 -beta 1
-```
-
 ### To convert the results to text files 
 
 ```
 cd ..
-python3 python3 lfr_benchmark.py
+python3 lfr_benchmark.py
 ```
 
 The results are for instance:
