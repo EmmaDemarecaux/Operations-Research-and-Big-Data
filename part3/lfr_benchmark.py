@@ -8,7 +8,6 @@ if __name__ == '__main__':
     clusters = []
     for line in open("./LFR-Benchmark/community.dat").readlines():
         clusters.append(int(line.replace('\t',' ').replace('\n',' ').split()[1])-1)
-    
     edges = []
     i = 0
     max_node = 0
@@ -20,7 +19,6 @@ if __name__ == '__main__':
         else:
             nb_nodes = str(line[9:12])
         i+=1
-    
     file_name = "n" + str(nb_nodes) + "_c" + str(len(set(clusters)))
     graph_file_name = "./graphs/lfr_" + file_name + ".txt"
     res_file_name = "./results/lfr_" + file_name + ".txt"
@@ -39,6 +37,7 @@ if __name__ == '__main__':
     res_file = open(graph_file_name, "w")
     res_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in G.edges()])
     res_file.close()
+    
     # save clusters
     clusters_file = open(res_file_name, "w")
     clusters_file.writelines([str(i) + " " + str(j) + "\n" for (i,j) in enumerate(clusters)])
