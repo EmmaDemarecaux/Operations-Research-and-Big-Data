@@ -374,12 +374,6 @@ The results are for instance:
 
 ## Evaluate the accuracy of the algorithms using the benchmarks
 
-Change the current working directory to `part3`:
-
-```
-cd ..
-```
-
 ### To execute
 
 ```
